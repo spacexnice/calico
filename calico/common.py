@@ -586,7 +586,7 @@ def validate_policy(policy_id, policy):
 
     for part in policy_id.tier, policy_id.policy_id:
         if not VALID_ID_RE.match(part):
-            issues.append("Invalid profile ID '%r'." % policy_id)
+            issues.append("Invalid policy ID '%r'." % policy_id)
 
     _validate_rules(policy, issues)
 

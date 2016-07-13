@@ -222,11 +222,11 @@ class TestCommon(unittest.TestCase):
                                      "Invalid profile ID"):
             common.validate_profile("a&b", rules.copy())
         with self.assertRaisesRegexp(ValidationFailed,
-                                     "Invalid profile ID"):
+                                     "Invalid policy ID"):
             common.validate_policy(TieredPolicyId("+123", "abc"),
                                    rules.copy())
         with self.assertRaisesRegexp(ValidationFailed,
-                                     "Invalid profile ID"):
+                                     "Invalid policy ID"):
             common.validate_policy(TieredPolicyId("abc", "+"),
                                    rules.copy())
 
