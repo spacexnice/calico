@@ -24,15 +24,19 @@ made in a new copy of the file with revved version suffix.  That allows
 us to maintain multiple copies of the data model in parallel during
 migrations.
 """
-import logging
+import logging,os
 import re
 
 from pyparsing import alphanums
 
 _log = logging.getLogger(__name__)
 
+prefix = os.getenv("FELIX_ETCD_ROOTPREFIX","")
+if prefix and not prefix.startswith("/",0):
+    prefix = "/%s" % prefix
+
 # All Calico data is stored under this path.
-ROOT_DIR = "/calico"
+ROOT_DIR = "%s/calico" % prefix
 
 # Current versions
 FELIX_VERSION = "/v1"
