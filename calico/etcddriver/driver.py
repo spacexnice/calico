@@ -31,6 +31,7 @@ The driver is responsible for
   Felix about all the individual keys that are deleted.
 """
 import logging
+import os
 import random
 import socket
 from Queue import Queue, Empty
@@ -119,6 +120,7 @@ class EtcdDriver(object):
         self._msg_reader = MessageReader(felix_sck)
         self._msg_writer = MessageWriter(felix_sck)
 
+        os.getenv("")
         # Global stop event used to signal to all threads to stop.
         self._stop_event = Event()
 
@@ -725,6 +727,7 @@ class EtcdDriver(object):
                                            key_file=self._etcd_key_file,
                                            cert_file=self._etcd_cert_file,
                                            ca_certs=self._etcd_ca_file,
+                                           assert_hostname=False,
                                            maxsize=1)
             else:
                 _log.debug("Getting new HTTP connection to %s:%s",

@@ -119,7 +119,8 @@ class EtcdClientOwner(object):
                  etcd_scheme="http",
                  etcd_key=None,
                  etcd_cert=None,
-                 etcd_ca=None):
+                 etcd_ca=None,
+                 etcd_verify_hostname=True):
         """Constructor.
         :param str|list[str] etcd_addrs: Either an authority string, such as
                'localhost:1234' to connect to a single server (or proxy) or a
@@ -152,6 +153,7 @@ class EtcdClientOwner(object):
         self.etcd_key = etcd_key
         self.etcd_cert = etcd_cert
         self.etcd_ca = etcd_ca
+        self.etcd_verify_cert_host=etcd_verify_hostname
         self.client = None
         self.reconnect()
 
@@ -186,7 +188,8 @@ class EtcdClientOwner(object):
                 protocol=self.etcd_scheme,
                 cert=key_pair,
                 ca_cert=self.etcd_ca,
-                expected_cluster_id=old_cluster_id
+                expected_cluster_id=old_cluster_id,
+                assert_hostname=self.etcd_verify_cert_host
             )
         else:
             self.client = etcd.Client(
@@ -195,7 +198,8 @@ class EtcdClientOwner(object):
                 cert=key_pair,
                 ca_cert=self.etcd_ca,
                 expected_cluster_id=old_cluster_id,
-                allow_reconnect=True
+                allow_reconnect=True,
+                assert_hostname=self.etcd_verify_cert_host
             )
 
 
@@ -211,12 +215,14 @@ class EtcdWatcher(EtcdClientOwner):
                  etcd_scheme="http",
                  etcd_key=None,
                  etcd_cert=None,
-                 etcd_ca=None):
+                 etcd_ca=None,
+                 etcd_verify_host=True):
         super(EtcdWatcher, self).__init__(etcd_addrs,
                                           etcd_scheme=etcd_scheme,
                                           etcd_key=etcd_key,
                                           etcd_cert=etcd_cert,
-                                          etcd_ca=etcd_ca)
+                                          etcd_ca=etcd_ca,
+                                          etcd_verify_hostname=etcd_verify_host)
         self.key_to_poll = key_to_poll
         self.next_etcd_index = None
 

@@ -320,6 +320,10 @@ class Config(object):
                            "2379,2380,4001 and 7001.",
                            [2379,2380,4001,7001], value_is_int_list=True)
 
+        self.add_parameter("EtcdVerifyCertHostname",
+                           "for test reason, if fasle then skip self "
+                           "signed certificate hostname verification ",
+                           True, value_is_bool=True)
         # The following setting determines which flavour of Iptables Generator
         # plugin is loaded.  Note: this plugin support is currently highly
         # experimental and may change significantly, or be removed completed,
@@ -429,6 +433,8 @@ class Config(object):
         self.ACTION_ON_DROP = self.parameters["DropActionOverride"].value
         self.IGNORE_LOOSE_RPF = self.parameters["IgnoreLooseRPF"].value
 
+        self.ETCD_VERIFY_CERT_HOSTNAME = self.parameters["EtcdVerifyCertHostname"].value
+
         self._validate_cfg(final=final)
 
         # Now calculate config options that rely on parameter validation.
@@ -485,9 +491,10 @@ class Config(object):
             assert(ENV in parameter.sources)
             # ENV is the first source, so we can assert that using defaults.
             assert(parameter.active_source is None)
-
+            print "NAME: %s , Para: %s "%(name,parameter.value)
             env_var = ("FELIX_%s" % name).upper()
             if env_var in os.environ:
+                print "FOUND: %s"%env_var
                 parameter.set(os.environ[env_var],
                               "Environment variable %s" % env_var)
 
